@@ -14,7 +14,7 @@ let context;
 let builder;
 let graph;
 
-const weightsUrl = 'https://github.com/webmachinelearning/test-data/tree/main/models/mobilenetv2_nhwc/weights/';
+const weightsUrl = 'https://github.com/webmachinelearning/test-data/raw/main/models/mobilenetv2_nhwc/weights/';
 const outputDimensions = [1, 1001];
 
 const buildConv = async (input, weightsSubName, biasSubName, relu6, options) => {
@@ -125,7 +125,7 @@ promise_setup(async () => {
 });
 
 promise_test(async () => {
-  const inputElement = await createInputElement('img', 'test.jpg');
+  const inputElement = await createInputElement('img', 'https://github.com/webmachinelearning/webnn-samples/blob/master/image_classification/images/test.jpg?raw=true');
   const inputBuffer = getInputTensor(inputElement, {
       mean: [127.5, 127.5, 127.5],
       std: [127.5, 127.5, 127.5],
@@ -140,7 +140,7 @@ promise_test(async () => {
   const inputs = {'input': inputBuffer};
   const outputs = {'output': outputBuffer};
   const results = await context.compute(graph, inputs, outputs);
-  const labels = await fetchLabels('https://github.com/webmachinelearning/webnn-samples/blob/master/image_classification/labels/labels1001.txt');
+  const labels = await fetchLabels('https://raw.githubusercontent.com/webmachinelearning/webnn-samples/master/image_classification/labels/labels1001.txt');
   // const labels = await fetchLabels('./labels1001.txt');
   const labelClasses = getTopClasses(results.outputs.output, labels);
 
