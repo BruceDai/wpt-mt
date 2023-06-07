@@ -163,8 +163,8 @@ const createInputElement = async (tagName, url) => {
   return new Promise((resolve) => {
     let element = document.createElement(tagName);
     element.addEventListener("load", () => resolve(element));
+    // element.crossOrigin = 'anonymous';
     element.src = url;
-    element.setAttribute('crossOrigin', 'Anonymous');
   });
 };
 
