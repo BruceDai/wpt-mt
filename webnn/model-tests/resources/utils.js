@@ -164,6 +164,7 @@ const createInputElement = async (tagName, url) => {
     let element = document.createElement(tagName);
     element.addEventListener("load", () => resolve(element));
     element.src = url;
+    element.setAttribute('crossOrigin', 'Anonymous');
   });
 };
 
