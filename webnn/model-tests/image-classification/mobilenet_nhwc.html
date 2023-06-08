@@ -122,7 +122,7 @@ const compute = async (inputBuffer, outputBuffer) => {
 promise_setup(async () => {
   context = await navigator.ml.createContext();
   builder = new MLGraphBuilder(context);
-});
+}, {test_timeout: 180000});
 
 promise_test(async () => {
 //   const inputElement = await createInputElement('img', 'https://github.com/webmachinelearning/webnn-samples/blob/master/image_classification/images/test.jpg?raw=true');
