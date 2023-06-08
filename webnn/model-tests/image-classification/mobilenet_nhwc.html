@@ -140,7 +140,9 @@ promise_test(async () => {
   // const results = await compute(inputBuffer, outputBuffer);
   const inputs = {'input': inputBuffer};
   const outputs = {'output': outputBuffer};
+//   console.time('Compute with MobileNet V2 NHWC model');
   const results = await context.compute(graph, inputs, outputs);
+//   console.timeEnd('Compute with MobileNet V2 NHWC model');
   const labels = await fetchLabels('https://raw.githubusercontent.com/webmachinelearning/webnn-samples/master/image_classification/labels/labels1001.txt');
   // const labels = await fetchLabels('./labels1001.txt');
   const labelClasses = getTopClasses(results.outputs.output, labels);
