@@ -1,6 +1,6 @@
 <!doctype html>
 <meta charset=utf-8>
-<title>test MobileNet V2 - NHWC</title>
+<title>test MobileNet V2 model with NHWC layout</title>
 <meta name="timeout" content="long">
 <script src="../../../resources/testharness.js"></script>
 <script src="../../../resources/testharnessreport.js"></script>
@@ -125,8 +125,8 @@ promise_setup(async () => {
 }, {explicit_timeout: true, test_timeout: 180000});
 
 promise_test(async () => {
-  const inputElement = await createInputElement('img', 'https://github.com/webmachinelearning/webnn-samples/blob/master/image_classification/images/test.jpg?raw=true');
-//   const inputElement = await createInputElement('img', 'test.jpg');
+//   const inputElement = await createInputElement('img', 'https://github.com/webmachinelearning/webnn-samples/blob/master/image_classification/images/test.jpg?raw=true');
+  const inputElement = await createInputElement('img', 'test.jpg');
   const inputBuffer = getInputTensor(inputElement, {
       mean: [127.5, 127.5, 127.5],
       std: [127.5, 127.5, 127.5],
@@ -146,7 +146,9 @@ promise_test(async () => {
   const labelClasses = getTopClasses(results.outputs.output, labels);
 
   assert_equals(labelClasses[0].label, 'lesser panda', 'get label ok');
-  // assert_equals(inputBuffer.length, sizeOfShape([224, 224, 3]), 'lesser panda', 'get label ok');
-}, 'test MobileNet V2 - NHWC');
+  assert_equals(labelClasses[1].label, 'polecat', 'get top 2 label ok');
+  assert_equals(labelClasses[2].label, 'giant panda', 'get top 3 label ok');
+}, 'test MobileNet V2 model with NHWC layout');
 </script>
 </body>
+</html>
