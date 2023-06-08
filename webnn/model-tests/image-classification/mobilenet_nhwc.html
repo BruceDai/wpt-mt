@@ -125,7 +125,8 @@ promise_setup(async () => {
 });
 
 promise_test(async () => {
-  const inputElement = await createInputElement('img', 'https://github.com/webmachinelearning/webnn-samples/blob/master/image_classification/images/test.jpg?raw=true');
+//   const inputElement = await createInputElement('img', 'https://github.com/webmachinelearning/webnn-samples/blob/master/image_classification/images/test.jpg?raw=true');
+  const inputElement = await createInputElement('img', 'test.jpg');
   const inputBuffer = getInputTensor(inputElement, {
       mean: [127.5, 127.5, 127.5],
       std: [127.5, 127.5, 127.5],
