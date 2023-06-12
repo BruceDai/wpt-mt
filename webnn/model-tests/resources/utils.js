@@ -50,115 +50,6 @@ const buildConstantByNpy = async (builder, url) => {
   return builder.constant({type, dimensions}, typedArray);
 };
 
-// /**
-//  * This method is used to covert input element to tensor data.
-//  * @param {Object} inputElement, an object of HTML [<img> | <video>] element.
-//  * @param {!Object<string, *>} inputOptions, an object of options to process
-//  * input element.
-//  * inputOptions = {
-//  *     inputLayout {String}, // input layout of tensor.
-//  *     inputDimensions: {!Array<number>}, // dimensions of input tensor.
-//  *     mean: {Array<number>}, // optional, mean values for processing the input
-//  *       element. If not specified, it will be set to [0, 0, 0, 0].
-//  *     std: {Array<number>}, // optional, std values for processing the input
-//  *       element. If not specified, it will be set to [1, 1, 1, 1].
-//  *     norm: {Boolean}, // optional, normlization flag. If not specified,
-//  *       it will be set to false.
-//  *     scaledFlag: {boolean}, // optional, scaling flag. If specified,
-//  *       scale the width and height of the input element.
-//  *     drawOptions: { // optional, drawOptions is used for
-//  *         CanvasRenderingContext2D.drawImage() method.
-//  *       sx: {number}, // the x-axis coordinate of the top left corner of
-//  *         sub-retangle of the source image.
-//  *       sy: {number}, // the y-axis coordinate of the top left corner of
-//  *         sub-retangle of the source image.
-//  *       sWidth: {number}, // the width of the sub-retangle of the
-//  *         source image.
-//  *       sHeight: {number}, // the height of the sub-retangle of the
-//  *         source image.
-//  *       dWidth: {number}, // the width to draw the image in the detination
-//  *         canvas.
-//  *       dHeight: {number}, // the height to draw the image in the detination
-//  *         canvas.
-//  *     },
-//  * };
-//  * @return {Object} tensor, an object of input tensor.
-//  */
-// const getInputTensor = async (type, inputUrl, inputOptions) => {
-//   const inputElement = document.createElement(type);
-//   inputElement.src = URL.createObjectURL(inputUrl);
-
-//   const inputDimensions = inputOptions.inputDimensions;
-//   const tensor = new Float32Array(
-//       inputDimensions.slice(1).reduce((a, b) => a * b));
-
-//   inputElement.width = inputElement.videoWidth ||
-//       inputElement.naturalWidth;
-//   inputElement.height = inputElement.videoHeight ||
-//       inputElement.naturalHeight;
-
-//   let [channels, height, width] = inputDimensions.slice(1);
-//   const mean = inputOptions.mean || [0, 0, 0, 0];
-//   const std = inputOptions.std || [1, 1, 1, 1];
-//   const normlizationFlag = inputOptions.norm || false;
-//   const channelScheme = inputOptions.channelScheme || 'RGB';
-//   const scaledFlag = inputOptions.scaledFlag || false;
-//   const inputLayout = inputOptions.inputLayout;
-//   const imageChannels = 4; // RGBA
-//   const drawOptions = inputOptions.drawOptions;
-//   if (inputLayout === 'nhwc') {
-//     [height, width, channels] = inputDimensions.slice(1);
-//   }
-//   const canvasElement = document.createElement('canvas');
-//   canvasElement.width = width;
-//   canvasElement.height = height;
-//   const canvasContext = canvasElement.getContext('2d');
-
-//   if (drawOptions) {
-//     canvasContext.drawImage(inputElement, drawOptions.sx, drawOptions.sy,
-//         drawOptions.sWidth, drawOptions.sHeight, 0, 0, drawOptions.dWidth,
-//         drawOptions.dHeight);
-//   } else {
-//     if (scaledFlag) {
-//       const resizeRatio = Math.max(Math.max(
-//           inputElement.width / width, inputElement.height / height), 1);
-//       const scaledWidth = Math.floor(inputElement.width / resizeRatio);
-//       const scaledHeight = Math.floor(inputElement.height / resizeRatio);
-//       canvasContext.drawImage(inputElement, 0, 0, scaledWidth, scaledHeight);
-//     } else {
-//       canvasContext.drawImage(inputElement, 0, 0, width, height);
-//     }
-//   }
-
-//   let pixels = canvasContext.getImageData(0, 0, width, height).data;
-
-//   if (normlizationFlag) {
-//     pixels = new Float32Array(pixels).map((p) => p / 255);
-//   }
-
-//   for (let c = 0; c < channels; ++c) {
-//     for (let h = 0; h < height; ++h) {
-//       for (let w = 0; w < width; ++w) {
-//         let value;
-//         if (channelScheme === 'BGR') {
-//           value = pixels[h * width * imageChannels + w * imageChannels +
-//               (channels - c - 1)];
-//         } else {
-//           value = pixels[h * width * imageChannels + w * imageChannels + c];
-//         }
-//         if (inputLayout === 'nchw') {
-//           tensor[c * width * height + h * width + w] =
-//               (value - mean[c]) / std[c];
-//         } else {
-//           tensor[h * width * channels + w * channels + c] =
-//               (value - mean[c]) / std[c];
-//         }
-//       }
-//     }
-//   }
-//   return tensor;
-// };
-
 const createInputElement = async (tagName, url) => {
   return new Promise((resolve) => {
     let element = document.createElement(tagName);
@@ -241,6 +132,7 @@ const getInputTensor = (inputElement, inputOptions) => {
 };
 
 const fetchLabels = async (url) => {
+  // const response = await fetch(url, {mode: 'cors'});
   const response = await fetch(url);
   const data = await response.text();
   return data.split('\n');
